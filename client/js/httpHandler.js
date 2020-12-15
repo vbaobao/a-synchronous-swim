@@ -11,6 +11,7 @@
   // Note: remember to fix the URL below.
   /////////////////////////////////////////////////////////////////////
 
+  //UPLOAD IS MISPELLED
   const ajaxFileUplaod = (file) => {
     var formData = new FormData();
     formData.append('file', file);
