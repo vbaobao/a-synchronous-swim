@@ -5,7 +5,23 @@
   //
   // TODO: build the swim command fetcher here
   //
+  var fetchSwim = (callback = () => {}) => {
+    $.ajax({
+      url: serverUrl,
+      type: 'GET',
+      data: '',
+      success: function(response) {
+        console.log(response);
+        callback(response);
+      },
+      error: function(error) {
+        console.error('Failed to fetch', error);
+      }
+    });
+  };
 
+  // setInterval(fetchSwim(), 5000);
+  fetchSwim();
   /////////////////////////////////////////////////////////////////////
   // The ajax file uplaoder is provided for your convenience!
   // Note: remember to fix the URL below.

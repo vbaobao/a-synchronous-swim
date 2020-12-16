@@ -25,7 +25,7 @@ describe('server responses', () => {
     // variables that store the request and response to and from the server
     let {req, res} = server.mock('http://127.0.0.1:3000', 'GET');
     let directions = ['up', 'down', 'left', 'right'];
-    // reassigns the reponse proprertys: _responseCode, _data, and _ended
+    // reassigns the response proprertys: _responseCode, _data, and _ended
     httpHandler.router(req, res);
     // server responds with success status
     expect(res._responseCode).to.equal(200);
