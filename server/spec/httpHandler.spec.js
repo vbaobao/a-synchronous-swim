@@ -12,8 +12,8 @@ describe('server responses', () => {
 
   it('should respond to a OPTIONS request', (done) => {
     let {req, res} = server.mock('/', 'OPTIONS');
-
     httpHandler.router(req, res);
+
     expect(res._responseCode).to.equal(200);
     expect(res._ended).to.equal(true);
     expect(res._data.toString()).to.be.empty;
@@ -22,26 +22,20 @@ describe('server responses', () => {
   });
 
   it('should respond to a GET request for a swim command', (done) => {
-    let {req, res} = server.mock('/', 'GET');
-    console.log(req);
-    console.log(res);
+    // variables that store the request and response to and from the server
+    let {req, res} = server.mock('http://127.0.0.1:3000', 'GET');
     let directions = ['up', 'down', 'left', 'right'];
-    let random = Math.floor(Math.random() * 5);
-
+    // reassigns the reponse proprertys: _responseCode, _data, and _ended
     httpHandler.router(req, res);
-    expect(res._responseCode).to.equal();
-    expect(res._ended).to.equal();
-    expect(res._data.toString()).to.be.;
+    // server responds with success status
+    expect(res._responseCode).to.equal(200);
+    // the server is done responding or the server the stream has completed?
+    expect(res._ended).to.equal(true);
+    // the server should responed with a direction
+    expect(directions.indexOf(res._data.toString()) >= 0).to.equal(true);
 
     done();
   });
-
-  // module.exports.router = (req, res, next = ()=>{}) => {
-  //   console.log('Serving request type ' + req.method + ' for url ' + req.url);
-  //   res.writeHead(200, headers);
-  //   res.end();
-  //   next(); // invoke next() at the end of a request to help with testing!
-  // };
 
   xit('should respond with 404 to a GET request for a missing background image', (done) => {
     httpHandler.backgroundImageFile = path.join('.', 'spec', 'missing.jpg');
