@@ -20,8 +20,8 @@ module.exports.router = (req, res, next = ()=>{}) => {
     let directions = ['up', 'down', 'left', 'right'];
     let random = Math.floor(Math.random() * (5));
     let randomDir = directions[random];
-    res.write(randomDir);
     res.writeHead(200, headers);
+    res.write(randomDir);
     res.end();
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);

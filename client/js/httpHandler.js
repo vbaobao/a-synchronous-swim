@@ -1,23 +1,22 @@
 (function() {
 
-  const serverUrl = 'http://127.0.0.1:3000';
+  const serverUrl = 'http://127.0.0.1:3000/';
 
   //
   // TODO: build the swim command fetcher here
   //
-  var fetchSwim = (callback = () => {}) => {
-    $.ajax({
+  var fetchSwim = () => {
+    $.get({
       url: serverUrl,
-      type: 'GET',
-      data: '',
-      success: function(response) {
-        console.log(response);
-        callback(response);
+      //type: 'GET',
+      success: (response) => {
+        console.log('success', response);
+        // callback(response);
       },
-      error: function(error) {
+      error: (error) => {
         console.error('Failed to fetch', error);
       }
-    });
+    })
   };
 
   // setInterval(fetchSwim(), 5000);
