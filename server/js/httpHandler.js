@@ -38,12 +38,13 @@ module.exports.router = (req, res, next = ()=>{}) => {
     }
   } else if (req.method === 'POST') {
     const content = req._postData;
-    console.log(content);
 
     try {
       const data = fs.writeFileSync(this.backgroundImageFile, content)
       //file written successfully
       console.log('SUCCESS');
+      res.writeHead(201, headers);
+      res.end();
     } catch (err) {
       console.error(err)
     }
