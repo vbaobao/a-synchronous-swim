@@ -13,11 +13,16 @@ module.exports.initialize = (queue) => {
 };
 
 let parseUrl = function(url) {
+  if (url.indexOf('?') === -1) { return {}; }
+
   let urlObj = {};
-  let urlList = url.split('?')[1].split('&');
-  for (const option of urlList) {
-    urlObj[option.split('=')[0]] = option.split('=')[1] || null;
+  let urlList = url.split('?')[1].split('&') || '';
+  if (urlList.length !== 0) {
+    for (const option of urlList) {
+      urlObj[option.split('=')[0]] = option.split('=')[1];
+    }
   }
+
   return urlObj;
 };
 
@@ -25,28 +30,27 @@ module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
   //console.log(res)
   if (req.method === 'GET') {
-    // let directions = ['up', 'down', 'left', 'right'];
-    // let random = Math.floor(Math.random() * (4));
-    // let randomDir = directions[random];
     let reqValues = parseUrl(req.url);
 
     if (reqValues.direction) {
       var direction = reqValues.direction.toLowerCase();
       res.writeHead(200, headers);
       res.write(direction);
+      res.end();
+      return;
     }
 
-    if (reqValues.backgroundimg) {
-      var background = reqValues.backgroundimg;
-
-      if (res._data.toString().indexOf(background) !== -1) {
+    if (this.backgroundImageFile) {
+      var background = this.backgroundImageFile;
+      try {
+        const data = fs.readFileSync(background, 'utf8');
         res.writeHead(200, headers);
-      } else {
+        res.end();
+      } catch (err) {
         res.writeHead(404, headers);
+        res.end();
       }
     }
-
-    res.end();
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
