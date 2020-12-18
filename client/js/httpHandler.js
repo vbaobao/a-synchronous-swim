@@ -19,8 +19,8 @@
     })
   };
 
-  // setInterval(fetchSwim(), 5000);
-  fetchSwim();
+  setInterval(function() { SwimTeam.move(fetchSwim()) }, 5000);
+
   /////////////////////////////////////////////////////////////////////
   // The ajax file uplaoder is provided for your convenience!
   // Note: remember to fix the URL below.

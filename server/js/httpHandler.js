@@ -14,11 +14,10 @@ module.exports.initialize = (queue) => {
 
 module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
-  // invoke next() at the end of a request to help with testing!
-
+  // console.log(res)
   if (req.method === 'GET') {
     let directions = ['up', 'down', 'left', 'right'];
-    let random = Math.floor(Math.random() * (5));
+    let random = Math.floor(Math.random() * (4));
     let randomDir = directions[random];
     res.writeHead(200, headers);
     res.write(randomDir);
@@ -27,5 +26,5 @@ module.exports.router = (req, res, next = ()=>{}) => {
     res.writeHead(200, headers);
     res.end();
   }
-  next();
+  next(); // invoke next() at the end of a request to help with testing!
 };
