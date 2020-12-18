@@ -8,7 +8,10 @@
     $.get({
       url: serverUrl,
       //type: 'GET',
-      data: value,
+      data: {
+        direction: value.direction || null,
+        backgroundimg: value.background || null
+      },
       success: (response) => {
         console.log('success', response);
         callback(response);

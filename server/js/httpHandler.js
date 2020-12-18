@@ -12,6 +12,15 @@ module.exports.initialize = (queue) => {
   messageQueue = queue;
 };
 
+let parseUrl = function(url) {
+  let urlObj = {};
+  let urlList = url.split('?')[1].split('&');
+  for (const option of urlList) {
+    urlObj[option.split('=')[0]] = option.split('=')[1] || null;
+  }
+  return urlObj;
+};
+
 module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
   //console.log(res)
@@ -19,25 +28,17 @@ module.exports.router = (req, res, next = ()=>{}) => {
     // let directions = ['up', 'down', 'left', 'right'];
     // let random = Math.floor(Math.random() * (4));
     // let randomDir = directions[random];
+    let reqValues = parseUrl(req.url);
 
-    if (req.url.indexOf('direction=') !== -1) {
-      var direction = req.url.split('direction=')[1].toLowerCase();
-      var directionIndex = direction.indexOf('&');
-      if (directionIndex !== -1) {
-        direction.substring(0, directionIndex);
-      }
+    if (reqValues.direction) {
+      var direction = reqValues.direction.toLowerCase();
       res.writeHead(200, headers);
       res.write(direction);
     }
 
-    if (req.url.indexOf('backgroundimg=') !== -1) {
-      var background = req.url.split('backgroundimg=')[1];
-      var backgroundIndex = background.indexOf('&');
-      if (backgroundIndex !== -1) {
-        background.substring(0, backgroundIndex);
-      }
+    if (reqValues.backgroundimg) {
+      var background = reqValues.backgroundimg;
 
-      console.log(res);
       if (res._data.toString().indexOf(background) !== -1) {
         res.writeHead(200, headers);
       } else {
