@@ -74,14 +74,15 @@ describe('server responses', () => {
     });
   });
 
-  xit('should send back the previously saved image', (done) => {
+  it('should send back the previously saved image', (done) => {
     fs.readFile(postTestFile, (err, fileData) => {
       httpHandler.backgroundImageFile = path.join('.', 'spec', 'temp.jpg');
-      let post = server.mock('FILL_ME_IN', 'POST', fileData);
+      let post = server.mock('http://127.0.0.1:3000', 'POST', fileData);
 
       httpHandler.router(post.req, post.res, () => {
-        let get = server.mock('FILL_ME_IN', 'GET');
+        let get = server.mock('http://127.0.0.1:3000', 'GET');
         httpHandler.router(get.req, get.res, () => {
+          console.log('CONTENTS OF FILEDATA: ', fileData);
           expect(Buffer.compare(fileData, get.res._data)).to.equal(0);
           done();
         });
