@@ -12,28 +12,13 @@ module.exports.initialize = (queue) => {
   messageQueue = queue;
 };
 
-let parseUrl = function(url) {
-  if (url.indexOf('?') === -1) { return {}; }
-
-  let urlObj = {};
-  let urlList = url.split('?')[1].split('&') || '';
-  if (urlList.length !== 0) {
-    for (const option of urlList) {
-      urlObj[option.split('=')[0]] = option.split('=')[1];
-    }
-  }
-
-  return urlObj;
-};
-
 module.exports.router = (req, res, next = ()=>{}) => {
   console.log('Serving request type ' + req.method + ' for url ' + req.url);
-  //console.log(res)
-  if (req.method === 'GET') {
-    let reqValues = parseUrl(req.url);
 
-    if (reqValues.direction) {
-      var direction = reqValues.direction.toLowerCase();
+  if (req.method === 'GET') {
+
+    if (req.url.indexOf('?') !== -1) {
+      let direction = req.url.split('?')[1].toLowerCase() || null;
       res.writeHead(200, headers);
       res.write(direction);
       res.end();
@@ -50,6 +35,17 @@ module.exports.router = (req, res, next = ()=>{}) => {
         res.writeHead(404, headers);
         res.end();
       }
+    }
+  } else if (req.method === 'POST') {
+    const content = req._postData;
+    console.log(content);
+
+    try {
+      const data = fs.writeFileSync(this.backgroundImageFile, content)
+      //file written successfully
+      console.log('SUCCESS');
+    } catch (err) {
+      console.error(err)
     }
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);

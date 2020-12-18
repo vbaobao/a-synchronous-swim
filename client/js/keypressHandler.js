@@ -2,7 +2,7 @@ $('body').on('keydown', (event) => {
   var arrowPress = event.key.match(/Arrow(Up|Down|Left|Right)/);
   if (arrowPress) {
     var direction = arrowPress[1];
-    fetchSwim({direction: direction}, SwimTeam.move);
+    fetchSwim(direction, SwimTeam.move);
   }
 });
 

@@ -23,8 +23,7 @@ describe('server responses', () => {
 
   it('should respond to a GET request for a swim command', (done) => {
     // variables that store the request and response to and from the server
-    let {req, res} = server.mock('http://127.0.0.1:3000/?direction=Up', 'GET');
-    let directions = ['up', 'down', 'left', 'right'];
+    let {req, res} = server.mock('http://127.0.0.1:3000/?Up', 'GET');
     // reassigns the response proprertys: _responseCode, _data, and _ended
     httpHandler.router(req, res);
     // server responds with success status

@@ -7,11 +7,7 @@
   var fetchSwim = (value, callback) => {
     $.get({
       url: serverUrl,
-      //type: 'GET',
-      data: {
-        direction: value.direction || null,
-        backgroundimg: value.background || null
-      },
+      data: value,
       success: (response) => {
         console.log('success', response);
         callback(response);
@@ -36,7 +32,7 @@
     $.ajax({
       type: 'POST',
       data: formData,
-      url: 'FILL_ME_IN',
+      url: serverUrl,
       cache: false,
       contentType: false,
       processData: false,
