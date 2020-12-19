@@ -25,16 +25,20 @@ module.exports.router = (req, res, next = ()=>{}) => {
       return;
     }
 
-    if (this.backgroundImageFile) {
-      var background = this.backgroundImageFile;
-      try {
-        const data = fs.readFileSync(background, 'utf8');
-        res.writeHead(200, headers);
-        res.end();
-      } catch (err) {
-        res.writeHead(404, headers);
-        res.end();
-      }
+    if (req.url === '/background.jpg') {
+      fs.readFile(this.backgroundImageFile, 'utf8', (err, data) => {
+        if (err) {
+          console.log(err);
+          res.writeHead(404, {'Content-Type': 'image/jpeg' });
+          //console.log(res); //Response code is correct, but for some reason not mapped to aJax response
+          res.end();
+          return;
+        }
+        res.writeHead(200, {'Content-Type': 'image/jpeg' });
+        res.end(data);
+        next();
+      });
+
     }
   } else if (req.method === 'POST') {
     try {
@@ -46,7 +50,6 @@ module.exports.router = (req, res, next = ()=>{}) => {
 
       try {
         const data = fs.readFileSync(background, 'utf8')
-        console.log(data)
         //file written successfully
         console.log('SUCCESS');
         res.writeHead(201, headers);
