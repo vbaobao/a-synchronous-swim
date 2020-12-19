@@ -22,23 +22,24 @@ module.exports.router = (req, res, next = ()=>{}) => {
       res.writeHead(200, headers);
       res.write(direction);
       res.end();
+      next();
       return;
     }
 
     if (req.url === '/background.jpg') {
-      fs.readFile(this.backgroundImageFile, 'utf8', (err, data) => {
+      fs.readFile(this.backgroundImageFile, (err, data) => {
         if (err) {
           console.log(err);
-          res.writeHead(404, {'Content-Type': 'image/jpeg' });
-          //console.log(res); //Response code is correct, but for some reason not mapped to aJax response
+          res.writeHead(404, {'Content-Type': 'image/jpeg'});
           res.end();
-          return;
+          next();
+        } else {
+          res.writeHead(200, {'Content-Type': 'image/jpeg'});
+          res.write(data);
+          res.end();
+          next();
         }
-        res.writeHead(200, {'Content-Type': 'image/jpeg' });
-        res.end(data);
-        next();
       });
-
     }
   } else if (req.method === 'POST') {
     try {
@@ -65,6 +66,7 @@ module.exports.router = (req, res, next = ()=>{}) => {
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
+    next();
   }
-  next(); // invoke next() at the end of a request to help with testing!
+  //next(); // invoke next() at the end of a request to help with testing!
 };
