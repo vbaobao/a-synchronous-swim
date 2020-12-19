@@ -42,25 +42,33 @@ module.exports.router = (req, res, next = ()=>{}) => {
       });
     }
   } else if (req.method === 'POST') {
-    console.log('POSTDATA: ', req._postData);
     // Create buffer
     // define an event handler that responds to request receiving data (node request event handling)
     // in request handler concat buffer with data recevied
     //define another event handler that waits for request to be over
     //inside event handler write image to file using buffer
-    fs.writeFile(this.backgroundImageFile, req._postData, 'binary', (err) => {
-      if (err) {
-        res.writeHead(404, headers);
-        res.end();
-        next();
-      } else {
-        console.log('SUCCESS');
-        res.writeHead(201, headers);
-        //res.write(data);
-        res.end();
-        next();
-      }
+    var fileData = Buffer.alloc(0);
+
+    req.on('data', (chunk) => {
+      fileData = Buffer.concat([fileData, chunk]);
     });
+
+    req.on('end', () => {
+      var file = multipart.getFile(fileData);
+      fs.writeFile(module.exports.backgroundImageFile, file.data, (err) => {
+        if (err) {
+          res.writeHead(404, headers);
+          res.end();
+          next();
+        } else {
+          console.log('SUCCESS');
+          res.writeHead(201, headers);
+          res.end();
+          next();
+        }
+      });
+    });
+
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();
