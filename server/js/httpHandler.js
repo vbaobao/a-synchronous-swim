@@ -42,27 +42,20 @@ module.exports.router = (req, res, next = ()=>{}) => {
       });
     }
   } else if (req.method === 'POST') {
-    try {
-      // Writes image to background.jpg
-      let background = this.backgroundImageFile;
-      req.addListener('data', (postData) => (
-        fs.writeFileSync(background, postData)
-      ));
-
-      try {
-        const data = fs.readFileSync(background, 'utf8')
-        //file written successfully
+    console.log('POSTDATA: ', req._postData);
+    fs.writeFile(this.backgroundImageFile, req._postData, 'binary', (err) => {
+      if (err) {
+        res.writeHead(404, headers);
+        res.end();
+        next();
+      } else {
         console.log('SUCCESS');
         res.writeHead(201, headers);
-        res.write(data);
+        //res.write(data);
         res.end();
-      } catch (err) {
-        console.error('Read file sync failed: ', err)
+        next();
       }
-
-    } catch (err) {
-      console.error(err)
-    }
+    });
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, headers);
     res.end();

@@ -27,8 +27,10 @@
 
   //UPLOAD IS MISPELLED
   const ajaxFileUplaod = (file) => {
+    console.log(file);
     var formData = new FormData();
     formData.append('file', file);
+    console.log(formData);
     $.ajax({
       type: 'POST',
       data: formData,
